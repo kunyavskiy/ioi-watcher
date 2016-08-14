@@ -26,6 +26,7 @@ participants = {
 
 start_time = datetime.datetime(2016, 8, 14, 9, 0, 0)
 
+
 def get_time(time):
     time = str(datetime.datetime.fromtimestamp(time) - start_time)
     return time.split('.')[0]
@@ -40,12 +41,15 @@ def download(url):
 
 def print_submission(submit):
     part = submit["participant"]
-    score = sum(submit['extra'])
+    score = submit['score']
     time = submit['time']
+    total = sum(submit['extra'])
     problem = submit["task"]
-    print("[" + get_time(time) + "]", part, "[" + participants[part] + "]", problems[problem], score)
-    os.system("notify-send '%s submited %s for %d points'" % (participants[part], problems[problem], score))
+    print("[" + get_time(time) + "]", part, "[" + participants[part] + "]", problems[problem], score, total)
+    os.system("[%s] notify-send '%s submited %s for %d points (now have %d)'" % (get_time(time), participants[part], problems[problem], score, total))
 
+
+print('Updating')
 
 try:
     data = json.load(open("data.json"))
