@@ -3,6 +3,7 @@
 import requests
 import json
 import os
+import datetime
 
 session = requests.session()
 
@@ -23,19 +24,26 @@ participants = {
     'RU2-4': 'Denis Solnkov'
 }
 
+start_time = datetime.datetime(2016, 8, 14, 9, 0, 0)
+
+def get_time(time):
+    time = str(datetime.datetime.fromtimestamp(time) - start_time)
+    return time.split('.')[0]
+
 
 def download(url):
-    print(url, end=' ')
     result = session.request('GET', url)
-    print(result.status_code)
+    if (result.status_code != 200):
+        print(url, result.status_code)
     return json.loads(result.text)
 
 
 def print_submission(submit):
     part = submit["participant"]
     score = sum(submit['extra'])
+    time = submit['time']
     problem = submit["task"]
-    print(part, problems[problem], score)
+    print("[" + get_time(time) + "]", part, "[" + participants[part] + "]", problems[problem], score)
     os.system("notify-send '%s submited %s for %d points'" % (participants[part], problems[problem], score))
 
 
