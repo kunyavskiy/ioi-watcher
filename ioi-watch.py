@@ -1,9 +1,9 @@
 #!/usr/bin/python3
 
-import requests
+import datetime
 import json
 import os
-import datetime
+import requests
 
 session = requests.session()
 
@@ -34,7 +34,7 @@ def get_time(time):
 
 def download(url):
     result = session.request('GET', url)
-    if (result.status_code != 200):
+    if result.status_code != 200:
         print(url, result.status_code)
     return json.loads(result.text)
 
@@ -46,7 +46,8 @@ def print_submission(submit):
     total = sum(submit['extra'])
     problem = submit["task"]
     print("[" + get_time(time) + "]", part, "[" + participants[part] + "]", problems[problem], score, total)
-    os.system("notify-send '[%s] %s submited %s for %d points (now have %d)'" % (get_time(time), participants[part], problems[problem], score, total))
+    os.system("notify-send '[%s] %s submited %s for %d points (now have %d)'" %
+              (get_time(time), participants[part], problems[problem], score, total))
 
 
 print('Updating')
