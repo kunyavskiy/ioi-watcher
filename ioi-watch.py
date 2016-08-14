@@ -46,7 +46,7 @@ def print_submission(submit):
     total = sum(submit['extra'])
     problem = submit["task"]
     print("[" + get_time(time) + "]", part, "[" + participants[part] + "]", problems[problem], score, total)
-    os.system("[%s] notify-send '%s submited %s for %d points (now have %d)'" % (get_time(time), participants[part], problems[problem], score, total))
+    os.system("notify-send '[%s] %s submited %s for %d points (now have %d)'" % (get_time(time), participants[part], problems[problem], score, total))
 
 
 print('Updating')
