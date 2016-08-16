@@ -10,7 +10,10 @@ session = requests.session()
 problems = {
     '1': 'moluecula',
     '2': 'railroad',
-    '3': 'shortcut'
+    '3': 'shortcut',
+    '4': 'painting',
+    '5': 'messy',
+    '6': 'aliens'
 }
 
 participants = {
