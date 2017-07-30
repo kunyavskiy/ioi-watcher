@@ -17,6 +17,8 @@ fmt = {
     'nowruz' : '%.2f',
 }
 
+subscore = dict()
+
 participants = {
     'RUS_2d4': 'Denis  Shpakovskii',
     'RUS_2d1': 'Aleksandra Drozdova',
@@ -43,10 +45,17 @@ def getFmt(problem):
 
 def print_submission(submit):
     part = submit["participant"]
-    score = submit['score']
-    time = submit['time']
-    total = sum(map(float, submit['extra']))
+    if part not in subscore:
+      subscore[part] = dict();
     problem = submit["task"]
+    score = submit['score']
+    if problem not in subscore[part]:
+      subscore[part][problem] = list(map(float, submit['extra']))
+    else:
+      for i in range(len(submit['extra'])):
+        subscore[part][problem][i] = max(subscore[part][problem][i], float(submit['extra'][i]))
+    total = sum(subscore[part][problem])
+    time = submit['time']
     print("[" + get_time(time) + "]", part, "[" + participants[part] + "]", problems[problem], score, total)
     os.system(("notify-send '[%s] %s submited %s for " + getFmt(problem) + " points (now have " + getFmt(problem) + ")'") %
               (get_time(time), participants[part], problems[problem], score, total))
@@ -61,7 +70,6 @@ except FileNotFoundError:
 
 for i in participants.keys():
     part_data = download('http://scoreboard.ioi2017.org/sublist/' + i)
-    print(part_data)
     for submit in part_data:
         submit["participant"] = i
         if submit not in data:
