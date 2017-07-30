@@ -56,7 +56,7 @@ def print_submission(submit):
         subscore[part][problem][i] = max(subscore[part][problem][i], float(submit['extra'][i]))
     total = sum(subscore[part][problem])
     time = submit['time']
-    print("[" + get_time(time) + "]", part, "[" + participants[part] + "]", problems[problem], score, total)
+    print("[" + get_time(time) + "]", part, "[" + participants[part] + "]", problems[problem], getFmt(problem) % score, getFmt(problem) % total)
     os.system(("notify-send '[%s] %s submited %s for " + getFmt(problem) + " points (now have " + getFmt(problem) + ")'") %
               (get_time(time), participants[part], problems[problem], score, total))
 
@@ -70,6 +70,7 @@ except FileNotFoundError:
 
 for i in participants.keys():
     part_data = download('http://scoreboard.ioi2017.org/sublist/' + i)
+    part_data.sort(key=lambda x: x["time"])
     for submit in part_data:
         submit["participant"] = i
         if submit not in data:
