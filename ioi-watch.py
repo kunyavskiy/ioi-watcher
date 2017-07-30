@@ -8,26 +8,23 @@ import requests
 session = requests.session()
 
 problems = {
-    '1': 'moluecula',
-    '2': 'railroad',
-    '3': 'shortcut',
-    '4': 'painting',
-    '5': 'messy',
-    '6': 'aliens'
+    'nowruz': 'nowruz',
+    'wiring': 'wiring',
+    'train': 'train',
+}
+
+fmt = {
+    'nowruz' : '%.2f',
 }
 
 participants = {
-    'RUS-1': 'Vladislav Makeev',
-    'RUS-2': 'Stanislav Naumov',
-    'RUS-3': 'Mikhail Putilin',
-    'RUS-4': 'Grigoriy Reznikov',
-    'RU2-1': 'Mikhail Anoprenko',
-    'RU2-2': 'Alexandra Drozdova',
-    'RU2-3': 'Askhat Sakhabiev',
-    'RU2-4': 'Denis Solnkov'
+    'RUS_2d4': 'Denis  Shpakovskii',
+    'RUS_2d1': 'Aleksandra Drozdova',
+    'RUS_2d2': 'Egor  Lifar',
+    'RUS_2d3': 'Vladimir Romanov',
 }
 
-start_time = datetime.datetime(2016, 8, 14, 9, 0, 0)
+start_time = datetime.datetime(2017, 7, 30, 7, 30, 0)
 
 
 def get_time(time):
@@ -41,15 +38,17 @@ def download(url):
         print(url, result.status_code)
     return json.loads(result.text)
 
+def getFmt(problem):
+    return '%d' if problem not in fmt else fmt[problem]
 
 def print_submission(submit):
     part = submit["participant"]
     score = submit['score']
     time = submit['time']
-    total = sum(submit['extra'])
+    total = sum(map(float, submit['extra']))
     problem = submit["task"]
     print("[" + get_time(time) + "]", part, "[" + participants[part] + "]", problems[problem], score, total)
-    os.system("notify-send '[%s] %s submited %s for %d points (now have %d)'" %
+    os.system(("notify-send '[%s] %s submited %s for " + getFmt(problem) + " points (now have " + getFmt(problem) + ")'") %
               (get_time(time), participants[part], problems[problem], score, total))
 
 
@@ -61,7 +60,8 @@ except FileNotFoundError:
     data = []
 
 for i in participants.keys():
-    part_data = download('http://pcms.ioi2016.ru/sublist/' + i)
+    part_data = download('http://scoreboard.ioi2017.org/sublist/' + i)
+    print(part_data)
     for submit in part_data:
         submit["participant"] = i
         if submit not in data:
