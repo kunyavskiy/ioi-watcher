@@ -20,9 +20,9 @@ fmt = {
 subscore = dict()
 
 participants = {
-    'RUS_2d4': 'Denis  Shpakovskii',
+    'RUS_2d4': 'Denis Shpakovskii',
     'RUS_2d1': 'Aleksandra Drozdova',
-    'RUS_2d2': 'Egor  Lifar',
+    'RUS_2d2': 'Egor Lifar',
     'RUS_2d3': 'Vladimir Romanov',
 }
 
