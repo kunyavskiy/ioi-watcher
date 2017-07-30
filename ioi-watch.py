@@ -43,12 +43,13 @@ def download(url):
 def getFmt(problem):
     return '%d' if problem not in fmt else fmt[problem]
 
-def print_submission(submit):
+def print_submission(submit, to_print):
     part = submit["participant"]
     if part not in subscore:
       subscore[part] = dict();
     problem = submit["task"]
     score = submit['score']
+    print(problem, submit['extra'])
     if problem not in subscore[part]:
       subscore[part][problem] = list(map(float, submit['extra']))
     else:
@@ -56,9 +57,10 @@ def print_submission(submit):
         subscore[part][problem][i] = max(subscore[part][problem][i], float(submit['extra'][i]))
     total = sum(subscore[part][problem])
     time = submit['time']
-    print("[" + get_time(time) + "]", part, "[" + participants[part] + "]", problems[problem], getFmt(problem) % score, getFmt(problem) % total)
-    os.system(("notify-send '[%s] %s submited %s for " + getFmt(problem) + " points (now have " + getFmt(problem) + ")'") %
-              (get_time(time), participants[part], problems[problem], score, total))
+    if to_print:
+      print("[" + get_time(time) + "]", part, "[" + participants[part] + "]", problems[problem], getFmt(problem) % score, getFmt(problem) % total)
+      os.system(("notify-send '[%s] %s submited %s for " + getFmt(problem) + " points (now have " + getFmt(problem) + ")'") %
+      (get_time(time), participants[part], problems[problem], score, total))
 
 
 print('Updating')
@@ -73,8 +75,7 @@ for i in participants.keys():
     part_data.sort(key=lambda x: x["time"])
     for submit in part_data:
         submit["participant"] = i
-        if submit not in data:
-            print_submission(submit)
+        print_submission(submit, submit not in data)
         data.append(submit)
 
 open("data.json", 'w').write(json.dumps(data))
