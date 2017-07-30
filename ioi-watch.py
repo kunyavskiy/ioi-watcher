@@ -49,7 +49,6 @@ def print_submission(submit, to_print):
       subscore[part] = dict();
     problem = submit["task"]
     score = submit['score']
-    print(problem, submit['extra'])
     if problem not in subscore[part]:
       subscore[part][problem] = list(map(float, submit['extra']))
     else:
