@@ -11,10 +11,14 @@ problems = {
     'nowruz': 'nowruz',
     'wiring': 'wiring',
     'train': 'train',
+    'prize': 'prize',
+    'simurgh' : 'simurgh',
+    'books' : 'books'
 }
 
 fmt = {
     'nowruz' : '%.2f',
+    'prize' : '%.2f'
 }
 
 subscore = dict()
@@ -26,7 +30,7 @@ participants = {
     'RUS_2d3': 'Vladimir Romanov',
 }
 
-start_time = datetime.datetime(2017, 7, 30, 7, 30, 0)
+start_time = datetime.datetime(2017, 8, 1, 7, 30, 0)
 
 
 def get_time(time):
@@ -35,6 +39,7 @@ def get_time(time):
 
 
 def download(url):
+    print(url)
     result = session.request('GET', url)
     if result.status_code != 200:
         print(url, result.status_code)
@@ -59,7 +64,7 @@ def print_submission(submit, to_print):
     if to_print:
       print("[" + get_time(time) + "]", part, "[" + participants[part] + "]", problems[problem], getFmt(problem) % score, getFmt(problem) % total)
       os.system(("notify-send '[%s] %s submited %s for " + getFmt(problem) + " points (now have " + getFmt(problem) + ")'") %
-      (get_time(time), participants[part], problems[problem], score, total))
+                (get_time(time), participants[part], problems[problem], score, total))
 
 
 print('Updating')
